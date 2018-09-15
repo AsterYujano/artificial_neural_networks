@@ -79,7 +79,18 @@ for i in range(0, trials):
 		error_counter=error_counter+1
 
 	trial_counter = trial_counter+1
+	if trial_counter == 10:
+		print('trial 10')
+	if trial_counter == 100:
+		print('trial 100')
+	if trial_counter == 1000:
+		print('trial 1000')
+	if trial_counter == 3000:
+		print('trial 3000')
+	if trial_counter == 6000:
+		print('trial 6000')
+	if trial_counter == 9000:
+		print('trial 9000')
 
 perror = (float(error_counter))/(float(trials))
-print('## perror')
-print(perror)
+print('## perror : '+str(perror))
