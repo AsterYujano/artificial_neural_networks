@@ -1,17 +1,18 @@
 import numpy as np
 import random
-
+# patern : 12, perror : 0.0013
+# patern : 20, perror : 0.0119
 ############
 #  Step 1  #
 ############
 error_counter = 0
 trial_counter = 0
-patterns_number = 100
+patterns_number = 40
+print('patterns number : '+str(patterns_number))
 
 ############
 #  Step 2  #
 ############
-#N = int(input("Choose N: "))
 N = 100
 bits = [-1, 1]
 trials = 10000
