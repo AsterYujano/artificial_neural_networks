@@ -1,10 +1,14 @@
 import numpy as np
 import random
+#with w=0
 # patern : 12, perror : 0.0013
 # patern : 20, perror : 0.0119
 # patern : 40, perror : 0.0544
 # patern : 60, perror : 0.0933
 # patern : 80, perror : 0.0
+
+#without w=0
+#patern 12 : 0.0007
 
 ############
 #  Step 1  #
