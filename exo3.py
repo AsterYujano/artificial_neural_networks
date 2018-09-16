@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import math
 
 ############
 #  Step 1  #
@@ -29,10 +30,12 @@ for patern in patterns_list:
 
 randomNumber = random.randint(0, len(patterns_list)-1)
 x1patern = patterns_list[0]
-print(x1patern)
 
 def stochastic_dynamic(noise, total):
-	return 1/(1+exp(-2*noise*total))
+	calcul1 = -2*noise*total
+	calcul2 = np.exp(calcul1)
+	calcul = 1/(1+calcul2)
+	return calcul
 
 for i in range(updates):
 	neuronNumber = random.randint(0, N-1)
@@ -42,7 +45,7 @@ for i in range(updates):
 	for i in range(N):
 		total = total + (x1patern[i]*matrixRow[i])
 
-	new = np.stochastic_dynamic(total)
+	new = stochastic_dynamic(noise,total)
 	if new == 0:
 		new = 1
 

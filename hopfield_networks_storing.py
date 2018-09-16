@@ -9,6 +9,7 @@ import random
 
 #without w=0
 #patern 12 : 0.0007
+#patern 20 : 0.0038
 
 ############
 #  Step 1  #
@@ -16,7 +17,7 @@ import random
 error_counter = 0
 trial_counter = 0
 #patterns_number = 60
-paterns_number_list = [12, 20, 40, 60, 80, 100]
+paterns_number_list = [20, 40, 60, 80, 100]
 
 ############
 #  Step 2  #
