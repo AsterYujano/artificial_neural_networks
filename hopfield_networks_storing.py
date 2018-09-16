@@ -2,6 +2,7 @@ import numpy as np
 import random
 # patern : 12, perror : 0.0013
 # patern : 20, perror : 0.0119
+# patern : 40, perror : 0.0544
 ############
 #  Step 1  #
 ############
