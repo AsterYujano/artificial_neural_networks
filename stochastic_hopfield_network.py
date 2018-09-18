@@ -38,13 +38,27 @@ randomNumber = random.randint(0, len(patterns_list)-1) #0 to 4
 x1patern = patterns_list[0]
 
 def stochastic_dynamic(noise, total):
-	gamma = 2*noise*total
+	### todo : UNDERSTAND HOW TO GET -1 et 1
+	gamma = -2*noise*total
+	response = 1/(1+math.exp(gamma))
+
+	values = [1, -1]
+	weights = [(response, 1-response)]
+	return random.choice(values, weights)
+
+
+
+	#return response
+
+
+	"""
 	if gamma < 0:
 		response = 1/(1 + math.exp(gamma))
 	else:
 		response = 1/(1 + math.exp(-gamma))
 	print(response)
 	return int(response)
+	"""
 
 for i in range(updates):
 	neuronNumber = random.randint(0, N-1)
@@ -55,6 +69,7 @@ for i in range(updates):
 		total = total + (x1patern[i]*matrixRow[i])
 
 	new = int(stochastic_dynamic(noise,total))
+	print(new)
 	if new == 0:
 		new = 1
 
