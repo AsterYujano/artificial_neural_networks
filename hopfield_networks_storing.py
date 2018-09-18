@@ -6,7 +6,7 @@ import random
 ############
 error_counter = 0
 trial_counter = 0
-patterns_number = 60
+patterns_number = 80
 paterns_number_list = [12, 20, 40, 60, 80, 100]
 
 ############
@@ -15,7 +15,7 @@ paterns_number_list = [12, 20, 40, 60, 80, 100]
 N = 100
 bits = [-1, 1]
 trials = 10000
-
+	
 print('patterns number : '+str(patterns_number))
 
 for i in range(0, trials):
@@ -82,18 +82,7 @@ for i in range(0, trials):
 		error_counter=error_counter+1
 
 	trial_counter = trial_counter+1
-	if trial_counter == 10:
-		print('trial 10')
-	if trial_counter == 100:
-		print('trial 100')
-	if trial_counter == 1000:
-		print('trial 1000')
-	if trial_counter == 3000:
-		print('trial 3000')
-	if trial_counter == 6000:
-		print('trial 6000')
-	if trial_counter == 9000:
-		print('trial 9000')
+	print("[+]"+str(trial_counter), end="\r")
 
 perror = (float(error_counter))/(float(trials))
 print('## perror : '+str(perror))
@@ -115,7 +104,7 @@ print('## perror : '+str(perror))
 #with w=0
 # patern : 12, perror : 0.0013
 # patern : 20, perror : 0.0119
-# patern : 40, perror : 0.0544
+# patern : 40, perror : 0.0544	
 # patern : 60, perror : 0.0933
 # patern : 80, perror : 0.1345
 # patern : 100, perror : 0.1655
@@ -124,6 +113,6 @@ print('## perror : '+str(perror))
 # patern 12 : 0.0007
 # patern 20 : 0.0038
 # patern 40 : 0.0146
-# patern 60, perror : 
-# patern 80, perror : 
-# patern 100, perror :
+# patern 60 : 0.0196
+# patern 80 : 0.0207
+# patern 100 : 0.0210
