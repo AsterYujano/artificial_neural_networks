@@ -1,16 +1,5 @@
 import numpy as np
 import random
-#with w=0
-# patern : 12, perror : 0.0013
-# patern : 20, perror : 0.0119
-# patern : 40, perror : 0.0544
-# patern : 60, perror : 0.0933
-# patern : 80, perror : 0.0
-
-#without w=0
-#patern 12 : 0.0007
-#patern 20 : 0.0038
-#patern 40 : 0.0146
 
 ############
 #  Step 1  #
@@ -108,3 +97,33 @@ for i in range(0, trials):
 
 perror = (float(error_counter))/(float(trials))
 print('## perror : '+str(perror))
+
+
+#############
+## ANSWERS ##
+#############
+
+# With diag = 0
+# [0.0013, 0.0119, 0.0544, 0.0933, 0.1345, 0.1655]
+
+# without (question2)
+# [0.0007, 0.0038, 0.0146, , ]
+
+
+# ------
+#DATAS
+#with w=0
+# patern : 12, perror : 0.0013
+# patern : 20, perror : 0.0119
+# patern : 40, perror : 0.0544
+# patern : 60, perror : 0.0933
+# patern : 80, perror : 0.1345
+# patern : 100, perror : 0.1655
+
+#without w=0
+# patern 12 : 0.0007
+# patern 20 : 0.0038
+# patern 40 : 0.0146
+# patern 60, perror : 
+# patern 80, perror : 
+# patern 100, perror :

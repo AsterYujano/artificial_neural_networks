@@ -1,16 +1,17 @@
 import numpy as np
 import random
 import math
+import sys
 
-############
-#  Step 1  #
-############
 patterns_number = 5
 noise = 2
 updates = 10000
 N = 200
 bits = [-1, 1]
 
+###########
+# Storing #
+###########
 patterns_list = np.zeros((patterns_number, N), dtype=int)
 for patern in patterns_list:
 	for i in range(N):
@@ -28,12 +29,13 @@ for patern in patterns_list:
 				matrix_weight_of_x[i,j] = patern[i]*patern[j]
 	weight_matrix = weight_matrix + matrix_weight_of_x
 
-#UPDATE###########################""
 weight_matrix = (1/N)*weight_matrix
-##################################"""
 
-randomNumber = random.randint(0, len(patterns_list)-1)
-x1patern = patterns_list[0]  
+##############
+# Feeding X1 #
+##############
+randomNumber = random.randint(0, len(patterns_list)-1) #0 to 4
+x1patern = patterns_list[0]
 
 def stochastic_dynamic(noise, total):
 	gamma = 2*noise*total
@@ -57,6 +59,7 @@ for i in range(updates):
 		new = 1
 
 	x1patern[neuronNumber] = new
+
 print(x1patern)
 
 
