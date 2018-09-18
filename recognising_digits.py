@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import sys
 
 x1=[ 
 [ -1, -1, -1, -1, -1, -1, -1, -1, -1, -1],
@@ -26,15 +27,24 @@ x5=[ [ -1, 1, 1, -1, -1, -1, -1, 1, 1, -1],[ -1, 1, 1, -1, -1, -1, -1, 1, 1, -1]
 #############
 # Functions #
 #############
+def convert_to_real_patern(patern):
+	new_patern = np.zeros((16, 10), dtype=int)
+	n = 0
+	for line in patern:
+		for i in range(len(line)):
+			new_patern[n, i] = line[i]
+		n=n+1
+	return new_patern
+
 def print_number(patern):
-	for x in patern:
-		for i in range(len(x)):
-			if x[i] == 1:
+	for i in range(16):
+		for j in range(10):
+			if patern[i,j] == 1:
 				print("X", end="")
 			else:
-				print(" ", end="")
-		print('.\n', end="")
-	print("\n ----- \n")
+				print(".", end="")
+		print('\n', end="")
+	return
 
 def dimensions(patern):
 	y = len(patern)
@@ -76,22 +86,31 @@ def create_matrix(patterns_list):
 				else:
 					matrix_weight_of_x[i,j] = patern[i]*patern[j]
 		weight_matrix = weight_matrix + matrix_weight_of_x
-	print(weight_matrix)
+	#print(weight_matrix)
 	return weight_matrix
 
 def print_vector(vector):
 	new_print = np.zeros((16,10), dtype=int)
-	print(new_print)
 	n=0
 	for line in new_print:
 		for i in range(0, 10):
 			new_print[i] = vector[n]
 			n=n+1
-	print(new_print)
+
+def result(feed):
+	print("####INPOUT####")
+	print(print_number(feed))
+	print("####OUTOUT####")
+	feeding(feed)
 
 ########
 # Main #
 ########
+x1 = convert_to_real_patern(x1)
+x2 = convert_to_real_patern(x2)
+x3 = convert_to_real_patern(x3)
+x4 = convert_to_real_patern(x4)
+x5 = convert_to_real_patern(x5)
 
 patterns_list = [x1, x2, x3, x4, x5]
 #print_number(x1)
@@ -101,43 +120,39 @@ weight_matrix = create_matrix(patterns_list)
 feed1 = [[1, 1, -1, -1, -1, -1, -1, -1, 1, 1], [-1, -1, 1, 1, 1, 1, 1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, 1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, 1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, 1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, 1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, 1, 1, 1, -1], [-1, -1, 1, 1, 1, 1, 1, 1, -1, -1], [-1, -1, 1, 1, 1, 1, 1, 1, -1, -1], [-1, -1, -1, -1, -1, -1, 1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, 1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, 1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, 1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, 1, 1, 1, -1], [-1, -1, 1, 1, 1, 1, 1, 1, 1, -1], [-1, -1, 1, 1, 1, 1, 1, 1, -1, -1]] 
 feed2 = [[1, 1, 1, -1, -1, -1, -1, 1, 1, 1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1], [-1, -1, -1, 1, 1, 1, 1, -1, -1, -1]] 
 feed3 = [[1, -1, -1, 1, 1, 1, 1, -1, -1, 1], [1, -1, -1, 1, 1, 1, 1, -1, -1, 1], [1, -1, -1, 1, 1, 1, 1, -1, -1, 1], [1, -1, -1, 1, 1, 1, 1, -1, -1, 1], [1, -1, -1, 1, 1, 1, 1, -1, -1, 1], [1, -1, -1, 1, 1, 1, 1, -1, -1, 1], [1, -1, -1, 1, 1, 1, 1, -1, -1, 1], [1, -1, -1, -1, -1, -1, -1, -1, -1, 1], [1, -1, -1, -1, -1, 1, 1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, -1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, -1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, -1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, -1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, -1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, -1, 1, 1, -1], [-1, -1, -1, -1, -1, -1, -1, 1, 1, -1]] 
+feed1 = convert_to_real_patern(feed1)
+feed2 = convert_to_real_patern(feed2)
+feed3 = convert_to_real_patern(feed3)
 
-#print_number(feed1)
-vector1 = convert_to_vector(feed1)
 
 ########
 ##TEST##
 ########
 
 def feeding(input):
-	print_number(input)
 	vector= convert_to_vector(input)
-	for i in range(100):
-		neuronNumber = random.randint(0, len(input)-1)
+	for i in range(1000):
+		neuronNumber = random.randint(0, len(input))
 		#print('## neuron number : '+ str(neuronNumber))
 
-		matrixRow = weight_matrix[neuronNumber -1]
+		matrixRow = weight_matrix[neuronNumber ]
 
 		total = 0
 		for i in range(0,len(vector)):
 			total = total + (vector[i]*matrixRow[i])
 		new = np.sign(total)
-		#print("new value of the bit :"+str(new))
+		if new == 0:
+			new = 1
+
 		vector[neuronNumber] = new
 
-		#print_number(vector1)
-		#print("new : "+ str(new))
-		#print("vector1 updated : \n" + str(vector))
-
-
-	for i in range(1,len(vector)):
-		if vector[i-1] == 1:
+	for i in range(len(vector)):
+		if vector[i] == 1:
 				print("X", end="")
 		else:
-			print(" ", end="")
-		if i%10==0:
-			print(".\n", end="")
-print_number(x2)
-feeding(feed2)
+			print(".", end="")
+		if (i+1)%10==0:
+			print("\n", end="")
 
-#print_vector(vector1)
+
+result(feed3)

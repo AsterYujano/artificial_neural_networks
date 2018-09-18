@@ -28,14 +28,21 @@ for patern in patterns_list:
 				matrix_weight_of_x[i,j] = patern[i]*patern[j]
 	weight_matrix = weight_matrix + matrix_weight_of_x
 
+#UPDATE###########################""
+weight_matrix = (1/N)*weight_matrix
+##################################"""
+
 randomNumber = random.randint(0, len(patterns_list)-1)
-x1patern = patterns_list[0]
+x1patern = patterns_list[0]  
 
 def stochastic_dynamic(noise, total):
-	calcul1 = -2*noise*total
-	calcul2 = np.exp(calcul1)
-	calcul = 1/(1+calcul2)
-	return calcul
+	gamma = 2*noise*total
+	if gamma < 0:
+		response = 1/(1 + math.exp(gamma))
+	else:
+		response = 1/(1 + math.exp(-gamma))
+	print(response)
+	return int(response)
 
 for i in range(updates):
 	neuronNumber = random.randint(0, N-1)
@@ -45,7 +52,7 @@ for i in range(updates):
 	for i in range(N):
 		total = total + (x1patern[i]*matrixRow[i])
 
-	new = stochastic_dynamic(noise,total)
+	new = int(stochastic_dynamic(noise,total))
 	if new == 0:
 		new = 1
 
