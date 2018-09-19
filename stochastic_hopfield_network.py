@@ -16,7 +16,6 @@ secondSum = 0
 #Functions#
 ###########
 def stochastic_dynamic(noise, total):
-	### todo : UNDERSTAND HOW TO GET -1 et 1
 	gamma = -2*noise*total
 	response = 1/(1+math.exp(gamma))
 	stochastic_dyn = np.random.choice([1, -1], p=[round(response,3), round(1-response,3)])
