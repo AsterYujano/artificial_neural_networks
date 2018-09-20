@@ -2,7 +2,7 @@
 _true_
 
 ###That the energy cannot increase under the deterministic Hopfield dynamics is a consequence of the fact that the weights are symmetric. 
-_true_
+_true_ (false si consequence)
 **"Note that Hebb’s rule yields symmetric weights, For symmetric
 weights it follows that H cannot increase under the dynamics of the Hopfield
 model.**"
@@ -20,7 +20,7 @@ spurious states. The network may converge to spurious states, this is undesirabl
 **"Stored patterns may be minima of the energy function (attractors), but they need not be"**
 
 ###In the limit of N→∞ the order parameter mμ can have more than one component of order unity, the other components are small. 
-???
+_???_
 if we feed one of the stored patterns,
 x^(1) for example, then we want the noisy dynamics to stay in the vicinity of x(1). This can only work if the noise is weakenough. Success is measured by the order parameter mμ
 Now assume that m1≈m with m of order unity, and mμ≈0 for μ6=0.

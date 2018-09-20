@@ -5,12 +5,11 @@ import sys
 
 patterns_number = 5
 noise = 2
-updates = 1000 #todo modify
+updates = 100 #todo modify
 N = 200
 bits = [-1, 1]
 sumM1 = 0
-firstSum = 0
-secondSum = 0
+
 
 ###########
 #Functions#
@@ -23,8 +22,8 @@ def stochastic_dynamic(noise, total):
 
 def process():
 	global sumM1
-	global firstSum
-	global secondSum
+	firstSum = 0
+	secondSum = 0
 	###########
 	# Storing #
 	###########
@@ -50,35 +49,50 @@ def process():
 	##############
 	# Feeding X1 #
 	##############
-	x1patern = patterns_list[0]
-	Xj = patterns_list[0]
+	Xjbougepas = patterns_list[0]
+
+	x1patern = np.zeros(N, dtype=int)
+	for i in range(N):
+			x1patern[i]=Xjbougepas[i]
+
+	x1patern_previous = np.zeros(N, dtype=int)
+	for i in range(N):
+			x1patern_previous[i]=Xjbougepas[i]
+	## todo : peut etre erreur copie et référence
 
 	for update in range(updates):
-		for neuronNumber in range(len(x1patern)):
+		firstSum = 0
+		print(update, end="\r")
+		for neuronNumber in range(N):
 			matrixRow = weight_matrix[neuronNumber]
 			total = 0
 			for i in range(len(x1patern)):
-				total = total + (x1patern[i]*matrixRow[i])
+				total = total + (x1patern_previous[i]*matrixRow[i])
 			x1patern[neuronNumber] = int(stochastic_dynamic(noise,total))
 
 			## start order parameter calculation
-			firstSum = firstSum + (x1patern[neuronNumber] * Xj[neuronNumber])
+			firstSum = firstSum + (x1patern[neuronNumber] * Xjbougepas[neuronNumber])
+			#print("[+] : "+str((x1patern[neuronNumber] * Xjbougepas[neuronNumber])))
+
 		firstSum = firstSum/N
 		#print(update,end="\r")
-
+		x1patern_previous = x1patern
 		secondSum = secondSum + firstSum 
 	m1 = secondSum/updates
-	print("m1 :"+ str(m1))
+	#print("m1 :"+ str(m1))
 	#sys.exit()
 	sumM1 = sumM1 + m1
 	return sumM1
 
 
-
-for i in range(2):#100
+nbr_trials = 100
+for i in range(nbr_trials):#100
 	#print(i, end="\r")
 	sum = process()
-sum = sum/2
+sum = sum/nbr_trials
 
 print("# subM1")
 print(sum)
+
+#0.9392000000000006
+#0.1272999999999999
