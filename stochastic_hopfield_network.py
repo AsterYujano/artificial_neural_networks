@@ -5,7 +5,7 @@ import sys
 
 patterns_number = 5
 noise = 2
-updates = 100 #todo modify
+updates = 10000
 N = 200
 bits = [-1, 1]
 sumM1 = 0
