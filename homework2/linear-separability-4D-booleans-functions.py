@@ -33,21 +33,30 @@ def guess(inputs, weights):
 		total_activation+=input*weight
 	return 1 if total_activation >= 0 else -1
 
-def train(inputs, target, learning_rate):
+def train(inputs, target, learning_rate, weights):
 	error = target - guess(inputs, weights)
+	#if error == 0: print("pas d erreur")
 	for i in range(len(weights)):
-		weights[i] = (error * inputs[i])*learning_rate
+		weights[i] += error * inputs[i] * learning_rate
 	return weights
 
-def main(weights):
+def main(weights, verbose=False):
 	for inputs in datasets:
 		for i in range(10000):
-			print("target:"+str(inputs[3]))
 			target = inputs[3]
-			new_weights = train(inputs, target, learning_rate)
-			print(new_weights)
-			sys.exit() #one input
 
+			old_weights = [0.,0.,0.]
+			for j in range(len(weights)):
+				old_weights[j] = weights[j]
+
+			weights = train(inputs, target, learning_rate, weights)
+			if old_weights == weights:
+				if verbose: print("i = "+str(i)+"; trained.")
+				break
+
+	#Try a guess with good new updated weights	
+	for inputs in datasets:
+		print(guess(inputs, weights))
 
 if __name__=='__main__':
 	main(weights)
