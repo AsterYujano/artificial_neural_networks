@@ -33,24 +33,29 @@ targets = [
 weights = [0.,0.,0.]
 for i in range(len(weights)):
 	weights[i] = random.uniform(-0.2, 0.2)
-threshold = random.uniform(-1., 1.)
+threshold = 0
 learning_rate = 0.02
+beta = 0.5
 
 def guess(inputs, weights):
 	total_activation = 0.
+	threshold = random.uniform(-1., 1.) #todo : To update ?
 	for input,weight in zip(inputs, weights):
 		total_activation+=input*weight
 	total_activation = total_activation - threshold
-	return np.tanh(0.5*total_activation)
-	
+	return np.tanh(beta*total_activation)
+
+#Todo : chaque neuron a son Threshold, appliquer la formule de dtheta poru l'update
 def train(inputs, target, learning_rate, weights):
-	error = target - guess(inputs, weights)
+	output = guess(inputs, weights)
+	error = target - output
+	#update of weights
 	for i in range(len(weights)):
-		weights[i] += error * inputs[i] * learning_rate
+		weights[i] += learning_rate * beta * error * (1 - output) * inputs[i] 
 	return weights
 
-def main(weights, verbose=False):
-	targetsA = targets[5]
+def main(weights):
+	targetsA = targets[0]
 
 	for inputs in datasets:
 		#Take the right target in A for the inputs
@@ -62,9 +67,7 @@ def main(weights, verbose=False):
 				old_weights[j] = weights[j]
 
 			weights = train(inputs, target, learning_rate, weights)
-			if old_weights == weights:
-				if verbose: print("i = "+str(i)+"; trained.")
-				break
+			if old_weights == weights: break
 
 	#Try a guess with good new updated weights	
 	for inputs in datasets:
