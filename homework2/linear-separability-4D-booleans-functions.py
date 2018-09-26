@@ -45,15 +45,14 @@ def guess(inputs, weights):
 	
 def train(inputs, target, learning_rate, weights):
 	error = target - guess(inputs, weights)
-	#if error == 0: print("pas d erreur")
 	for i in range(len(weights)):
 		weights[i] += error * inputs[i] * learning_rate
 	return weights
 
 def main(weights, verbose=False):
-	targetsA = targets[0]
+	targetsA = targets[5]
 
-	for inputs in datasets: #each inputs is a function
+	for inputs in datasets:
 		#Take the right target in A for the inputs
 		target = targetsA[datasets.index(inputs)]
 		
