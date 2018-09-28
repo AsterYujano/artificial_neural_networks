@@ -50,7 +50,7 @@ def train(inputs, target, learning_rate, weights, threshold):
 	error = target - output
 	for i in range(len(weights)):
 		threshold += learning_rate * beta * error * (1 - (output)**2)
-		weights[i] += learning_rate * beta * error * (1 - output) * inputs[i] 
+		weights[i] += learning_rate * beta * error * (1 - (output)**2) * inputs[i] 
 	return weights, threshold
 
 def main(weights, verbose=False):
