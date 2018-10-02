@@ -11,8 +11,10 @@ Because 2⁸ = 256
 One symetry with a square.
 One with deux points side to side and the others two to the other side.
 And 4 for 3 points on the same side and the other point on a different location.
-
+So : 6
 
 ## How many linearly separable 3-dimensional Boolean functions are there? 
-not 1 , not 2, not 6
+
+https://en.wikipedia.org/wiki/Linear_separability
+104
 
