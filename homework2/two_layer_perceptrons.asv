@@ -9,9 +9,9 @@ target = training_set_init(:,3:3);
 %%%%%%%%%%%%
 %  To init %
 %%%%%%%%%%%%
-learning_rate = 0.015;
-M1 = 20; % nombre de neurones sur le layer1
-M2 = 15; 
+learning_rate = 0.02;
+M1 = 4; % number of neurons on layer one
+M2 = 2; 
 
 thresholdsM1 = zeros(1,M1);
 thresholdsM2 = zeros(1,M2);
@@ -21,7 +21,7 @@ weights1 = -0.2 + (0.2-(-0.2))*rand(M1,2);
 weights2 = -0.2 + (0.2-(-0.2))*rand(M2,M1);
 weights3= -0.2 + (0.2-(-0.2))*rand(1,M2);
 
-for repetition = 1:50000
+for repetition = 1:100000
     mu = randi([1 Nmu]);
 
     V0 = zeros(1,2);
@@ -114,6 +114,11 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Training validation Set %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+disp(weights1);
+disp(weights2);
+disp(weights3);
+
 validation_set = csvread("validation_set.csv");
 validation_training_set = validation_set(:,1:2);
 validation_target = training_set_init(:,3:3);
@@ -127,10 +132,6 @@ for mu = 1:Nmu
     end
     V1 = zeros(1, M1);
     V2 = zeros(1, M2);
-
-    %%%%%%%%%%%%%%%%%%%
-    % Propage forward %
-    %%%%%%%%%%%%%%%%%%%
 
     %Layer one
     for neuron = 1:M1
@@ -156,7 +157,10 @@ for mu = 1:Nmu
     local_field = local_field - threshold;
     output = tanh(local_field);
     
-    C = C + (1/(2*Nmu))* abs(sign(output) - validation_target(mu));
+    C = C + (1/(2*Nmu)) * (abs(sign(output) - validation_target(mu)));
 end
+
+C = C * 100;
+disp(C + " %");
 
 

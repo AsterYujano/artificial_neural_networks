@@ -9,8 +9,8 @@ target = training_set_init(:,3:3);
 %%%%%%%%%%%%
 %  To init %
 %%%%%%%%%%%%
-learning_rate = 0.015;
-M1 = 4; % nombre de neurones sur le layer1
+learning_rate = 0.02;
+M1 = 4; % number of neurons on layer one
 M2 = 2; 
 
 thresholdsM1 = zeros(1,M1);
@@ -90,7 +90,7 @@ for repetition = 1:100000
     for j = 1:2
        for i = 1:M1
         weights1(i,j) = weights1(i,j) + ( learning_rate * errorV1(i) + V0(j) );
-        thresholdsM1(i) = thresholdsM1(i) + ( learning_rate * errorV1(i));
+        thresholdsM1(i) = thresholdsM1(i) - ( learning_rate * errorV1(i));
        end
     end
 
@@ -98,14 +98,14 @@ for repetition = 1:100000
     for j = 1:M1
        for i = 1:M2
         weights2(i,j) = weights2(i,j) + ( learning_rate * errorV2(i) + V1(j) );
-        thresholdsM2(i) = thresholdsM2(i) + ( learning_rate * errorV2(i));
+        thresholdsM2(i) = thresholdsM2(i) - ( learning_rate * errorV2(i));
        end
     end
 
     %output
     for j = 1:M2
         weights3(j) = weights2(j) + ( learning_rate * error_o + V2(j) );
-        threshold = threshold + ( learning_rate * error_o);
+        threshold = threshold - ( learning_rate * error_o);
     end
 end
 
@@ -114,6 +114,10 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Training validation Set %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+% disp(weights1);
+% disp(weights2);
+% disp(weights3);
 
 validation_set = csvread("validation_set.csv");
 validation_training_set = validation_set(:,1:2);
@@ -153,7 +157,16 @@ for mu = 1:Nmu
     local_field = local_field - threshold;
     output = tanh(local_field);
     
-    C = C + (1/(2*Nmu)) * (abs(sign(output) - validation_target(mu)));
+    if output == 0
+        output=1;
+    end
+    
+    output =sign(output);
+    
+    C = C + (1/(2*Nmu)) * (abs(output - validation_target(mu)));
 end
+
+C = C * 100;
+disp(C + " %");
 
 
