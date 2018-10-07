@@ -9,19 +9,20 @@ target = training_set_init(:,3:3);
 %%%%%%%%%%%%
 %  To init %
 %%%%%%%%%%%%
-learning_rate = 0.02;
-M1 = 4; % number of neurons on layer one
-M2 = 2; 
+learning_rate = 0.01;
+M1 = 1; % number of neurons on layer one
+M2 = 1; 
+T = 10^5;
 
 thresholdsM1 = zeros(1,M1);
 thresholdsM2 = zeros(1,M2);
 threshold = 0;
-
+%you can generate N random numbers in the interval (a,b) with the formula r = a + (b-a).*rand(1,N). 
 weights1 = -0.2 + (0.2-(-0.2))*rand(M1,2);
 weights2 = -0.2 + (0.2-(-0.2))*rand(M2,M1);
 weights3= -0.2 + (0.2-(-0.2))*rand(1,M2);
 
-for repetition = 1:100000
+for repetition = 1:T
     mu = randi([1 Nmu]);
 
     V0 = zeros(1,2);
@@ -63,7 +64,6 @@ for repetition = 1:100000
     % Propage backward errors %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-    error_o = 0;
     errorV1 = zeros(1, M1);
     errorV2 = zeros(1, M2);
 
@@ -107,66 +107,63 @@ for repetition = 1:100000
         weights3(j) = weights2(j) + ( learning_rate * error_o + V2(j) );
         threshold = threshold - ( learning_rate * error_o);
     end
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % Training validation Set %
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%
+    if mod(repetition,10000)==0
+        validation_set = csvread("validation_set.csv");
+        validation_training_set = validation_set(:,1:2);
+        validation_target = training_set_init(:,3:3);
+        Nmu_val = size(validation_set,1);
+        C = 0;
+
+        for mu = 1:Nmu_val
+            V0_val = zeros(1,2);
+            for k = 1:2
+                V0_val(1,k) = validation_training_set(mu,k);
+            end
+            V1_val = zeros(1, M1);
+            V2_val = zeros(1, M2);
+
+            %Layer one
+            for neuron = 1:M1
+                for input = 1:2
+                    V1_val(neuron) = V1_val(neuron) + weights1(neuron,input)*V0_val(input);
+                end
+                V1_val(neuron) = tanh(V1_val(neuron) - thresholdsM1(neuron));
+            end
+
+            %Layer two
+            for neuron = 1:M2
+                for input = 1:M1
+                    V2_val(neuron) = V2_val(neuron) + weights2(neuron,input)*V1_val(input);
+                end
+                V2_val(neuron) = tanh(V2_val(neuron) - thresholdsM2(neuron));
+            end
+
+            %output final
+            local_field = 0;
+            for input = 1:M2
+                local_field = local_field + weights3(input)*V2_val(input);
+            end
+            local_field = local_field - threshold;
+            output = tanh(local_field);
+
+            if output == 0
+                output = 1;
+            end
+
+            output = sign(output);
+            test = validation_target(mu);
+
+            C = C + (1/(2*Nmu_val)) * (abs(output - validation_target(mu)));
+        end
+        disp(C*100 + " %");
+    end
 end
 
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Training validation Set %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
-% disp(weights1);
-% disp(weights2);
-% disp(weights3);
-
-validation_set = csvread("validation_set.csv");
-validation_training_set = validation_set(:,1:2);
-validation_target = training_set_init(:,3:3);
-Nmu = size(validation_set,1);
-C = 0;
-
-for mu = 1:Nmu
-    V0 = zeros(1,2);
-    for k = 1:2
-        V0(1,k) = validation_training_set(mu,k);
-    end
-    V1 = zeros(1, M1);
-    V2 = zeros(1, M2);
-
-    %Layer one
-    for neuron = 1:M1
-        for input = 1:2
-            V1(neuron) = V1(neuron) + weights1(neuron,input)*V0(input);
-        end
-        V1(neuron) = tanh(V1(neuron) - thresholdsM1(neuron));
-    end
-
-    %Layer two
-    for neuron = 1:M2
-        for input = 1:M1
-            V2(neuron) = V2(neuron) + weights2(neuron,input)*V1(input);
-        end
-        V2(neuron) = tanh(V2(neuron) - thresholdsM2(neuron));
-    end
-
-    %output final
-    local_field = 0;
-    for input = 1:M2
-        local_field = local_field + weights3(input)*V2(input);
-    end
-    local_field = local_field - threshold;
-    output = tanh(local_field);
-    
-    if output == 0
-        output=1;
-    end
-    
-    output =sign(output);
-    
-    C = C + (1/(2*Nmu)) * (abs(output - validation_target(mu)));
-end
-
-C = C * 100;
-disp(C + " %");
 
 
