@@ -2,7 +2,7 @@
 
 exercises from Artificial neural Networks course at Chalmers University
 
-You must use Python 3 to run these programs
+You must use Python 3 to run some of these programs and Matlab for others.
 
 ### Notes
 
