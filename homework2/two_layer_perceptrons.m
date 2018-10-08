@@ -9,9 +9,9 @@ target = training_set_init(:,3:3);
 %%%%%%%%%%%%
 %  To init %
 %%%%%%%%%%%%
-learning_rate = 0.01;
-M1 = 1; % number of neurons on layer one
-M2 = 1; 
+learning_rate = 0.02;
+M1 = 3; % number of neurons on layer one
+M2 = 2; 
 T = 10^5;
 
 thresholdsM1 = zeros(1,M1);
@@ -87,26 +87,26 @@ for repetition = 1:T
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     %layer one
-    for j = 1:2
-       for i = 1:M1
-        weights1(i,j) = weights1(i,j) + ( learning_rate * errorV1(i) + V0(j) );
+    for i = 1:M1
+        for j = 1:2
+            weights1(i,j) = weights1(i,j) + ( learning_rate * errorV1(i) + V0(j) );
+        end
         thresholdsM1(i) = thresholdsM1(i) - ( learning_rate * errorV1(i));
-       end
     end
 
     %layer two
-    for j = 1:M1
-       for i = 1:M2
+    for i = 1:M2
+        for j = 1:M1
         weights2(i,j) = weights2(i,j) + ( learning_rate * errorV2(i) + V1(j) );
-        thresholdsM2(i) = thresholdsM2(i) - ( learning_rate * errorV2(i));
-       end
+        end
+       thresholdsM2(i) = thresholdsM2(i) - ( learning_rate * errorV2(i));
     end
 
     %output
     for j = 1:M2
         weights3(j) = weights2(j) + ( learning_rate * error_o + V2(j) );
-        threshold = threshold - ( learning_rate * error_o);
     end
+    threshold = threshold - ( learning_rate * error_o);
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Training validation Set %
@@ -155,7 +155,6 @@ for repetition = 1:T
             end
 
             output = sign(output);
-            test = validation_target(mu);
 
             C = C + (1/(2*Nmu_val)) * (abs(output - validation_target(mu)));
         end
