@@ -4,25 +4,29 @@
 %%%%%%%%
 % TRUE %
 %%%%%%%%
+
 Vanishing gradient problem
 
 ## Two hidden layers are sufficient to approximate any real-valued function with N inputs and one output in terms of a perceptron.
 %%%%%%%%
 % TRUE %
 %%%%%%%%
+
 In general, for N inputs, two hidden layers are sufficient, with 2N units in the first layer, and one unit per basis function in second layer.
 "any real-valued"
 
 ## In minimisation with a Lagrange multiplier, the function multiplying the Lagrange multiplier must be equal to or larger than zero. 
-are incorporated using Lagrange multipliers A and B (both positive)
 %%%%%%%%
 % FALSE% 
 %%%%%%%%
+
+are incorporated using Lagrange multipliers A and B (both positive)
 
 ## Using a stochastic path through weight space in backpropagation allows for the energy to increase in some updates.
 %%%%%%%%
 % True %
 %%%%%%%%
+
 si tu fais batch mode ça peut que descendre mais si tu fais stochastic comme tu prends qu'un seul pattern pour calculer les erreurs y a moyen que l'énergie remonte
 
 "In backpropagation with batch training the energy can increase in an update." 
@@ -40,6 +44,7 @@ In practice, the stochastic gradient-descent dynamics may be too noisy
 %%%%%%%%
 % TRUE %
 %%%%%%%%
+
 These two weight-decay schemes are referred to as regularisation schemes because they tend to help against overfitting.
 The idea is that a network with smaller weights is more robust to the effect of noise. When the weights are small, then small changes in some of the patterns do not give a substantially different training result.  When the network has large weights, by contrast, it may happen that small changes in the input give significant differences in the training result that are difficult to generalise
 
@@ -47,6 +52,7 @@ The idea is that a network with smaller weights is more robust to the effect of 
 %%%%%%%%%
 % FALSE %
 %%%%%%%%%
+
 Gradient descent learning : by minimising an energy function using gradient descent.  This requires
 differentiation, therefore we must choose a differentiable activation function.
 The simplest choice is g(b)=b
