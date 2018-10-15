@@ -6,14 +6,19 @@ training_set = training_set_init(:,1:2);
 Nmu = size(training_set,1);
 target = training_set_init(:,3:3);
 
+validation_set = csvread("validation_set.csv");
+validation_training_set = validation_set(:,1:2);
+validation_target = training_set_init(:,3:3);
+Nmu_val = size(validation_set,1);
+
 %%%%%%%%%%%%
 %  To init %
 %%%%%%%%%%%%
 learning_rate = 0.02;
 M1 = 8; % number of neurons on layer one
 M2 = 4; 
-T = 10^7;
-T_repet = 10^6;
+T = 10^8;
+T_repet = 10^7;
 
 thresholdsM1 = zeros(1,M1);
 thresholdsM2 = zeros(1,M2);
@@ -121,12 +126,7 @@ for repetition = 1:T
     % Training validation Set %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%
     if mod(repetition,T_repet)==0
-        validation_set = csvread("validation_set.csv");
-        validation_training_set = validation_set(:,1:2);
-        validation_target = training_set_init(:,3:3);
-        Nmu_val = size(validation_set,1);
         C = 0;
-
         for mu = 1:Nmu_val
             V0_val = zeros(1,2);
             for k = 1:2
@@ -164,10 +164,14 @@ for repetition = 1:T
             end
 
             output = sign(output);
-
-            C = C + (1/(2*Nmu_val)) * (abs(output - validation_target(mu)));
+            
+            C = C + abs(output - validation_target(mu));
         end
+        C = (1/(2*Nmu_val))*C;
         disp(C*100 + " %");
+        if C<0.12
+            return
+        end
     end
 end
 
