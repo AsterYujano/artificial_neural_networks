@@ -8,9 +8,8 @@ target = tTrain;
 %center the input data around zero
 mean = 0;
 for i = 1:Nmu
-    for j = 1:xTrain(i)
-        mean = mean + xTrain(i);
-    end
+    for j = 1:xTrain(
+    mean = mean + xTrain(i); 
 end
 disp(mean);
 return
