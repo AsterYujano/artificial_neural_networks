@@ -25,22 +25,20 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+
 %%%%%%%%%%%%
 %  To init %
 %%%%%%%%%%%%
-learning_rate = 0.02;
+%eta = learnng rate
+eta = 0.02;
 M1 = 8; % number of neurons on layer one
 M2 = 4; 
-T = 10^7;
+T = 10^8;
 T_repet = 10^6;
 
 thresholdsM1 = zeros(1,M1);
 thresholdsM2 = zeros(1,M2);
 threshold = 0;
-%you can generate N random numbers in the interval (a,b) with the formula r = a + (b-a).*rand(1,N). 
-% weights1 = -0.2 + (0.2-(-0.2))*rand(M1,2);
-% weights2 = -0.2 + (0.2-(-0.2))*rand(M2,M1);
-% weights3= -0.2 + (0.2-(-0.2))*rand(1,M2);
 
 weights1 = randn(M1,2);
 weights2 = randn(M2,M1);
@@ -63,29 +61,14 @@ for repetition = 1:T
     %%%%%%%%%%%%%%%%%%%
 
     %Layer one
-    for neuron = 1:M1
-        for input = 1:2
-            V1(neuron) = V1(neuron) + weights1(neuron,input)*V0(input);
-        end
-        V1(neuron) = V1(neuron) - thresholdsM1(neuron);
-        V1(neuron) = tanh(V1(neuron));
-    end
+    V1 = feeding(2,M1, V1, V0, weights1, thresholdsM1);
 
     %Layer two
-    for neuron = 1:M2
-        for input = 1:M1
-            V2(neuron) = V2(neuron) + weights2(neuron,input)*V1(input);
-        end
-        V2(neuron) = V2(neuron) - thresholdsM2(neuron);
-        V2(neuron) = tanh(V2(neuron));
-    end
+    V2 = feeding(M1, M2, V2, V1, weights2, thresholdsM2);
 
     %output final
-    for input = 1:M2
-        local_field = local_field + weights3(input)*V2(input);
-    end
-    local_field = local_field - threshold;
-    output = tanh(local_field);
+    output = feeding(M2, 1, local_field, V2, weights3, threshold);
+
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Propage backward errors %
@@ -115,36 +98,19 @@ for repetition = 1:T
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     %layer one
-    for i = 1:M1
-        for j = 1:2
-            weights1(i,j) = weights1(i,j) + ( learning_rate * errorV1(i) * V0(j) );
-        end
-        thresholdsM1(i) = thresholdsM1(i) - ( learning_rate * errorV1(i));
-    end
+    [weights1, thresholdsM1] = update(2, M1, weights1, thresholdsM1, eta, errorV1, V0);
 
     %layer two
-    for i = 1:M2
-        for j = 1:M1
-        weights2(i,j) = weights2(i,j) + ( learning_rate * errorV2(i) * V1(j) );
-        end
-       thresholdsM2(i) = thresholdsM2(i) - ( learning_rate * errorV2(i));
-    end
+    [weights2, thresholdsM2] = update(M1, M2, weights2, thresholdsM2, eta, errorV2, V1);
 
     %output
-    for j = 1:M2
-        weights3(j) = weights2(j) + ( learning_rate * error_o * V2(j) );
-    end
-    threshold = threshold - ( learning_rate * error_o);
+    [weights3, threshold] = update(M2, 1, weights3, threshold, eta, error_o, V2);
     
     %%%%%%%%%%%%%%%%%%%%%%%%%%%
     % Training validation Set %
     %%%%%%%%%%%%%%%%%%%%%%%%%%%
     if mod(repetition,T_repet)==0
-        validation_training_set = xTest;
-        validation_target = tTest;
-        Nmu_val = size(validation_training_set,1);
         C = 0;
-
         for mu = 1:Nmu_val
             V0_val = zeros(1,2);
             for k = 1:2
@@ -154,44 +120,75 @@ for repetition = 1:T
             V2_val = zeros(1, M2);
 
             %Layer one
-            for neuron = 1:M1
-                for input = 1:2
-                    V1_val(neuron) = V1_val(neuron) + weights1(neuron,input)*V0_val(input);
-                end
-                V1_val(neuron) = tanh(V1_val(neuron) - thresholdsM1(neuron));
-            end
-
+            V1_val = feeding(2,M1, V1_val, V0_val, weights1, thresholdsM1);
+            
             %Layer two
-            for neuron = 1:M2
-                for input = 1:M1
-                    V2_val(neuron) = V2_val(neuron) + weights2(neuron,input)*V1_val(input);
-                end
-                V2_val(neuron) = tanh(V2_val(neuron) - thresholdsM2(neuron));
-            end
+            V2 = feeding(M1, M2, V2_val, V1_val, weights2, thresholdsM2);
 
             %output final
-            local_field = 0;
-            for input = 1:M2
-                local_field = local_field + weights3(input)*V2_val(input);
-            end
-            local_field = local_field - threshold;
-            output = tanh(local_field);
-
-            if output == 0
-                output = 1;
-            end
+            V3 = 0;
+            output = feeding(M2, 1, V3, V2_val, weights3, threshold);
 
             output = sign(output);
-
-            C = C + (1/(2*Nmu_val)) * (abs(output - validation_target(mu)));
+            
+            C = C + (1/(2*Nmu_val)) * abs(output - validation_target(mu));
         end
         disp(C*100 + " %");
+        if C<0.12
+            disp(C*100 + " %");
+            return
+        end
     end
 end
+
+% csvwrite("t3.csv",threshold);
+% csvwrite("t2.csv",thresholdsM2);
+% csvwrite("t1.csv",thresholdsM1);
+% csvwrite("w1.csv",weights1);
+% csvwrite("w2.csv",weights2);
+% csvwrite("w3.csv",weights3);
+
+% Size 1 is the size of the first layer from left to right
+function neurons = feeding(size1, size2, neurons,previous_neurons, weights, thresholds)
+    for neuronNumber = 1:size2
+        local_field = 0;
+        for input = 1:size1
+            local_field = local_field + weights(neuronNumber,input)*previous_neurons(input);
+        end
+        neurons(neuronNumber) = tanh(local_field - thresholds(neuronNumber));
+    end
+end
+
+function [weights, thresholds] = update(size1, size2, weights, thresholds, eta, error, neurones)
+    for i = 1:size2
+        for j = 1:size1
+            weights(i,j) = weights(i,j) + ( eta * error(i) * neurones(j) );
+        end
+    thresholds(i) = thresholds(i) - ( eta * error(i));
+    end
+end
+
  
 
 % digit number 25081
 %imshow(reshape(xTrain(:,25081),[28 28]));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
