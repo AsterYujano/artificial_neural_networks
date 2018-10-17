@@ -18,6 +18,7 @@ target = tTrain;
 % disp(mean);
 % return
 
+
 %Question : La moyenne se fait sur tout les p patterns. Or chaque patern a 
 
 
@@ -30,7 +31,7 @@ target = tTrain;
 %  To init %
 %%%%%%%%%%%%
 %eta = learnng rate
-eta = 0.02;
+eta = 0.3;
 M1 = 8; % number of neurons on layer one
 M2 = 4; 
 
@@ -48,9 +49,8 @@ weights2 = randn(M2,M1);
 weights3 = randn(1,M2);
 
 for epoch_number = 1:max_epoch
-    for mu = 1:mini_batch:Nmu
-        disp(mu);
-        return
+    for mu = 1:Nmu
+        disp("mu "+mu);
         V0 = zeros(1,2);
         for k = 1:2
             V0(1,k) = training_set(mu,k);
@@ -109,9 +109,8 @@ for epoch_number = 1:max_epoch
         %output
         [weights3, threshold] = update(M2, 1, weights3, threshold, eta, error_o, V2);
         
-        if mod(mu, 10)
-            disp("un mini batch de fait");
-            return
+        if mod(mu, 10) ==0
+            % do smtg
         end
     end
 end
